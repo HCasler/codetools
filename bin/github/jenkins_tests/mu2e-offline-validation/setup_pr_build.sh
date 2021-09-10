@@ -27,10 +27,13 @@ LIB_CACHE_FILE="$WORKSPACE/rev_${COMMIT_SHA}_pr_lib.tar.gz"
 if [ -f "$LIB_CACHE_FILE" ]; then
     echo "Found cached shared libraries for the PR version."
 
-    # this will extract the built shared libraries into master/Offline/lib
+    # this will extract the built shared libraries into pr/Offline/lib
     tar -xzvf $LIB_CACHE_FILE 2>&1 > $WORKSPACE/pr_build_unzip.log || exit 1;
 
     echo "Build restored successfully."
+else
+    echo "Failed to find PR lib cache file ${LIB_CACHE_FILE}"
+    exit 1
 fi
 
 exit 0;
