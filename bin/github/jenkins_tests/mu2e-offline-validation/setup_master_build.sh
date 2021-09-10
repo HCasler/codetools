@@ -14,7 +14,7 @@ export WORKING_DIRECTORY_MASTER="$WORKSPACE/master"
 mkdir -p $WORKING_DIRECTORY_MASTER
 cd "$WORKING_DIRECTORY_MASTER" || exit 1
 
-setup_offline "$REPOSITORY"
+setup_build_repos "$REPOSITORY"
 
 # check if we have built libraries for this revision from a previous build
 LIB_CACHE_FILE="$WORKSPACE/rev_${MASTER_COMMIT_SHA}_master_lib.tar.gz"
