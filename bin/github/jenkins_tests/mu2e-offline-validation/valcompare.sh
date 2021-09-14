@@ -6,7 +6,8 @@
 set --
 
 setup mu2e
-. $WORKSPACE/master/Offline/setup.sh # will set up root...
+setup muse
+muse setup "$WORKSPACE/master" # will set up root
 
 rm -rf $WORKSPACE/validation_web
 mkdir -p $WORKSPACE/validation_web
