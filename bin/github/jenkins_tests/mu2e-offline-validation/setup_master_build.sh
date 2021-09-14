@@ -79,14 +79,14 @@ cat /proc/cpuinfo | head -30
     setup codetools
 
     # building prof and debug
-    ./buildopts --build=$BUILDTYPE
-    source setup.sh
+    setup muse
+    muse setup -q $BUILDTYPE # set in Jenkins
 
     echo "["`date`"] ups"
     ups active
 
     echo "["`date`"] build"
-    scons -k -j $NJOBS --max-drift=1 --implicit-deps-unchanged 2>&1 | tee scons.log
+    muse build -k -j $NJOBS --max-drift=1 --implicit-deps-unchanged 2>&1 | tee scons.log
 
     RC1=${PIPESTATUS[0]}
     echo "["`date`"] scons return code is $RC1"
