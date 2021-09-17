@@ -37,14 +37,8 @@ echo "OK!"
 
 
 # clean workspace from previous build 
-echo "Delete files in workspace from previous builds (not directories)"
-rm $WORKSPACE/* # removes files only - we only expect folders to exist in the workspace at the start of the build.
-rm $WORKSPACE/.sconsign.dblite
-rm -rf $WORKSPACE/build # this shouldn't be hanging around either
-echo "Workspace now:"
-ls -lah
-echo ""
-echo ""
+CLEAN_WORKSPACE_SCRIPT="${TESTSCRIPT_DIR}/clean_workspace.sh"
+source $CLEAN_WORKSPACE_SCRIPT
 
 echo "Bootstrapping job $1..."
 
