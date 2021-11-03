@@ -33,6 +33,7 @@ root -b < ${WORKSPACE}/validation-script 2>&1 | tee ${WORKSPACE}/valCompare.log
 VRC=${PIPESTATUS[0]}
 
 if [ ! -f "${WORKSPACE}/validation_web/result.html" ]; then
+    append_report_row "valcompare" ":x:" "[Log file](${JOB_URL}/${BUILD_NUMBER}/artifact/TBD.log)" # TODO: work out where this goes
 	exit 1;
 fi
 
@@ -46,6 +47,7 @@ cat $WORKSPACE/valCompare.log | awk 'BEGIN{ found=0} /TValCompare/{found=1}  {if
 grep -vwE "TCanvas::Print" temp.log > $WORKSPACE/valCompareSummary.log
 
 if [ ! -f "${WORKSPACE}/valCompareSummary.log" ]; then
+    append_report_row "valcompare summary" ":x:" "[Log file](${JOB_URL}/${BUILD_NUMBER}/artifact/TBD.log)" # TODO: work out where this goes
 	exit 1;
 fi
 

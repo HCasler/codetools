@@ -33,8 +33,11 @@ fi
 
     if [ "$RC2" -ne 0 ]; then
         echo "[$(date)] ($WORKING_DIRECTORY) error while running validation job - abort"
+        append_report_row "${VALIDATION_JOB} (${BUILDVER})" ":x:" "[Log file](${JOB_URL}/${BUILD_NUMBER}/artifact/TBD.log)" # TODO: work out where this goes
         exit 1;
     fi
+    # may or may not want this reported every time
+    #append_report_row "${VALIDATION_JOB} (${BUILDVER})" ":white_check_mark:" "[Log file](${JOB_URL}/${BUILD_NUMBER}/artifact/TBD.log)" # TODO: work out where this goes
 
     echo "[$(date)] ($WORKING_DIRECTORY) generate validation plots"
     mu2e -s mcs* -c Offline/Validation/fcl/val.fcl 2>&1 | tee "$WORKING_DIRECTORY/val_pr.log"
@@ -43,6 +46,7 @@ fi
     echo "[$(date)] ($WORKING_DIRECTORY) validation plots return code is $RC3"
     if [ "$RC3" -ne 0 ]; then
         echo "[$(date)] ($WORKING_DIRECTORY) error while generating validation plots - abort"
+        append_report_row "generate validation plots (${BUILDVER})" ":x:" "[Log file](${JOB_URL}/${BUILD_NUMBER}/artifact/TBD.log)" # TODO: work out where this goes
         exit 1;
     fi
 

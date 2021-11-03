@@ -3,6 +3,9 @@
 # roneil@fnal.gov
 # ryunosuke.oneil@postgrad.manchester.ac.uk
 
+# the table
+MU2E_POSTTEST_STATUSES=""
+
 cd "$WORKSPACE" || exit
 
 echo "[$(date)] setup CMS-BOT/mu2e"
@@ -75,12 +78,14 @@ cmsbot_report gh-report.md
 
     if [ $PR_RESTORE_OUTCOME -ne 0 ]; then
         echo "[$(date)] PR build could not be restored (return code $PR_RESTORE_OUTCOME) - abort."
+        append_report_row "restore PR build" ":x:" "Mu2e/${REPO_NAME} build for ${COMMIT_SHA} could not be restored"
         exit 1;
     fi
 
     if [ $MASTER_BUILD_OUTCOME -ne 2 ]; then
         if [ $MASTER_BUILD_OUTCOME -ne 0 ]; then
             echo "[$(date)] master build could not be restored or built - abort."
+            append_report_row "base branch build/restore" ":x:" "Mu2e/${REPO_NAME} base branch could not  be build or restored"
             exit 1;
         fi
     else
@@ -108,11 +113,15 @@ ${JOB_URL}/${BUILD_NUMBER}/console
 
 Please review the [logfile](${JOB_URL}/${BUILD_NUMBER}/console) and try again.
 
+| Step          | Result        | Details |
+| ------------- |:-------------:| ------- |${MU2E_POSTTEST_STATUSES}
+
 EOM
     cmsbot_report gh-run-report.md
     exit 1;
 fi
 
+append_report_row "restore builds" ":white_check_mark:" "restored PR ${PULL_REQUEST} at ${COMMIT_SHA} and base branch"
 echo "[$(date)] PR and master builds are ready. generate plots..."
 
 # run validation jobs for each build version in parallel.
@@ -160,11 +169,15 @@ ${JOB_URL}/${BUILD_NUMBER}/console
 
 Please review the [logfile](${JOB_URL}/${BUILD_NUMBER}/console) and try again.
 
+| Step          | Result        | Details |
+| ------------- |:-------------:| ------- |${MU2E_POSTTEST_STATUSES}
+
 EOM
     cmsbot_report gh-run-report.md
     exit 1;
 fi
 
+append_report_row "generate validation plots" ":white_check_mark:" "created validation plots for ${VALIDATION_JOB} with ${VALIDATION_EVENTS} events for PR and base branch"
 echo "[$(date)] PR and master validation plots are ready - generate comparison..."
 
 (
@@ -184,11 +197,15 @@ ${JOB_URL}/${BUILD_NUMBER}/console
 
 Please review the [logfile](${JOB_URL}/${BUILD_NUMBER}/console) and try again.
 
+| Step          | Result        | Details |
+| ------------- |:-------------:| ------- |${MU2E_POSTTEST_STATUSES}
+
 EOM
     cmsbot_report gh-run-report.md
     exit 1;
 fi
 
+append_report_row "valcompare" ":white_check_mark:" "create comparison"
 echo "[$(date)] report successful outcome"
 
 VAL_COMP_SUMMARY=$(cat valCompareSummary.log | head -n 12)
@@ -212,6 +229,9 @@ ${VAL_COMP_SUMMARY}
 
 Validation plots are [viewable here](${VALPLOT_LINKTWO}), and can be [downloaded here](${VALPLOT_LINK}).
 For full job output, please see [this link.](${JOB_URL}/${BUILD_NUMBER}).
+
+| Step          | Result        | Details |
+| ------------- |:-------------:| ------- |${MU2E_POSTTEST_STATUSES}
 
 EOM
 cmsbot_report "$WORKSPACE/gh-report.md"
