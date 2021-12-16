@@ -249,6 +249,10 @@ cat >> "$WORKSPACE"/gh-report.md <<- EOM
 
 EOM
 
+# Only trigger validation if the tests passed and it was requested
+if [ "$BUILDTEST_OUTCOME" != 0 ]; then
+    TRIGGER_VALIDATION=0
+fi
 if [ "$TRIGGER_VALIDATION" = "1" ]; then
 
 cat >> "$WORKSPACE"/gh-report.md <<- EOM
