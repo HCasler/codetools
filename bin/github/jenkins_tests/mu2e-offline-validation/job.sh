@@ -41,6 +41,21 @@ EOM
     exit 1;
 fi
 
+# get the TEST_WITH_PR and NO_MERGE variables, if present
+# If the properties file is there but those variables are not present,
+# the resulting variables will be empty
+REPO_SHORT=$(echo $REPOSITORY | sed 's|^.*/||')
+BUILD_PROPERTIES_FILE=trigger-mu2e-build-Mu2e-${REPO_SHORT}-${PULL_REQUEST}.properties 
+if [ -f "$WORKSPACE/$BUILD_PROPERTIES_FILE" ]; then
+    export TEST_WITH_PR=$(grep --color=never TEST_WITH_PR $WORKSPACE/$BUILD_PROPERTIES_FILE | sed s/TEST_WITH_PR=//)
+    export NO_MERGE=$(grep --color=never NO_MERGE $WORKSPACE/$BUILD_PROPERTIES_FILE | sed s/NO_MERGE=//)
+    echo "Recovered PR build properties TEST_WITH_PR=${TEST_WITH_PR} and NO_MERGE=${NO_MERGE}"
+else
+    echo "[`date`] WARNING: Failed to recover PR build test properties file ${BUILD_PROPERTIES_FILE}, some properties will be missing"
+    export TEST_WITH_PR=""
+    export NO_MERGE=""
+fi
+
 cd "$WORKSPACE" || exit 1
 
 # report that the job script is now running
@@ -78,14 +93,14 @@ cmsbot_report gh-report.md
 
     if [ $PR_RESTORE_OUTCOME -ne 0 ]; then
         echo "[$(date)] PR build could not be restored (return code $PR_RESTORE_OUTCOME) - abort."
-        append_report_row "restore PR build" ":x:" "Mu2e/${REPO_NAME} build for ${COMMIT_SHA} could not be restored"
+        append_report_row "restore PR build" ":x:" "Mu2e/${REPO_SHORT} build for ${COMMIT_SHA} could not be restored"
         exit 1;
     fi
 
     if [ $MASTER_BUILD_OUTCOME -ne 2 ]; then
         if [ $MASTER_BUILD_OUTCOME -ne 0 ]; then
             echo "[$(date)] master build could not be restored or built - abort."
-            append_report_row "base branch build/restore" ":x:" "Mu2e/${REPO_NAME} base branch could not  be build or restored"
+            append_report_row "base branch build/restore" ":x:" "Mu2e/${REPO_SHORT} base branch could not  be build or restored"
             exit 1;
         fi
     else
