@@ -11,8 +11,14 @@ function append_report_row() {
 # Checks out the correct branches and revisions of the code, performs all merges.
 # At the end of this, the repositories should be in the right conditions to build 
 # the code and run the tests.
+# Takes an optional argument: if given, it specifies the main directory to do
+# work in. If not given, defaults to the value of $WORKSPACE
+# Examples:
+# prepare_repositories "$WORKING_DIRECTORY_PR" # for PR validation builds
+# prepare_repositories # for build test builds
 function prepare_repositories() {
-    cd ${WORKSPACE}/${REPO}
+    WORKSPACE_LOC=${1:-$WORKSPACE}
+    cd ${WORKSPACE_LOC}/${REPO}
     if [ $? -ne 0 ]; then 
         return 1
     fi
@@ -36,16 +42,16 @@ function prepare_repositories() {
             if [[ $pr = \#* ]]; then
                 REPO_NAME="$REPO"
                 THE_PR=$( echo $pr | awk -F\# '{print $2}' )
-                cd $WORKSPACE/$REPO
+                cd $WORKSPACE_LOC/$REPO
             elif [[ $pr = *\#* ]]; then
                 # get the repository name
                 REPO_NAME=$( echo $pr | awk -F\# '{print $1}' )
                 THE_PR=$( echo $pr | awk -F\# '{print $2}' )
 
                 # check it exists, and clone it into the workspace if it does not.
-                if [ ! -d "$WORKSPACE/$REPO_NAME" ]; then
+                if [ ! -d "$WORKSPACE_LOC/$REPO_NAME" ]; then
                     (
-                        cd $WORKSPACE
+                        cd $WORKSPACE_LOC
                         git clone git@github.com:Mu2e/${REPO_NAME}.git ${REPO_NAME} || exit 1
                     )
                     if [ $? -ne 0 ]; then 
@@ -54,7 +60,7 @@ function prepare_repositories() {
                     fi
                 fi
                 # change directory to it
-                cd $WORKSPACE/$REPO_NAME || exit 1
+                cd $WORKSPACE_LOC/$REPO_NAME || exit 1
             else
                 # ???
                 return 1
@@ -102,7 +108,7 @@ function prepare_repositories() {
         done
     fi
     
-    cd ${WORKSPACE}/${REPO}
+    cd ${WORKSPACE_LOC}/${REPO}
 
     if [ "${NO_MERGE}" != "1" ]; then 
         echo "[$(date)] Merging PR#${PULL_REQUEST} at ${COMMIT_SHA}."

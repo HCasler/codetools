@@ -15,13 +15,7 @@ cd "$WORKING_DIRECTORY_PR" || exit 1
 
 setup_build_repos "$REPOSITORY"
 
-# switch to Offline and merge in the PR branch at the required master rev
-cd "$WORKING_DIRECTORY_PR/$REPO" || exit 1
-# this next bit is not great
-WORKSPACE_ORIG=$WORKSPACE 
-WORKSPACE=$WORKING_DIRECTORY_PR
-prepare_repositories || exit 2 # in github_common
-WORKSPACE=$WORKSPACE_ORIG
+prepare_repositories "$WORKING_DIRECTORY_PR" || exit 2 # in github_common
 
 # back to working directory
 cd "$WORKING_DIRECTORY_PR" || exit 1
