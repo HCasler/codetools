@@ -73,6 +73,7 @@ cat /proc/cpuinfo | head -30
 
 # run build in subprocess so parent env stays clean
 (
+    cd "$WORKING_DIRECTORY_MASTER"
     set --
     echo "["`date`"] setups"
     source /cvmfs/fermilab.opensciencegrid.org/products/common/etc/setups
