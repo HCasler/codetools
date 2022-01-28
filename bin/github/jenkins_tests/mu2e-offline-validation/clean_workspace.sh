@@ -15,14 +15,15 @@ PR_CACHE_FILE_NAME="rev_${COMMIT_SHA}_pr_lib.tar.gz"
 MASTER_CACHE_FILE_NAME="rev_${MASTER_COMMIT_SHA}_master_lib.tar.gz"
 MASTER_VALIDATION_NAME="rev_${MASTER_COMMIT_SHA}_master_validation.root"
 MASTER_SHA_TXT="master_commit_sha.txt"
-OLD_PROPERTIES_PATTERN="trigger-mu2e-build*"
+OLD_PROPERTIES_NAME="job_params.txt"
+
 # move these files so they don't get deleted during pre-run cleanup
 mkdir -p $KEEP_DIR_NAME
 mv "${WORKSPACE}/${PR_CACHE_FILE_NAME}"  "${KEEP_DIR_NAME}/${PR_CACHE_FILE_NAME}"
 mv "${WORKSPACE}/${MASTER_CACHE_FILE_NAME}" "${KEEP_DIR_NAME}/${MASTER_CACHE_FILE_NAME}"
 mv "${WORKSPACE}/${MASTER_VALIDATION_NAME}" "${KEEP_DIR_NAME}/${MASTER_VALIDATION_NAME}"
 mv "${WORKSPACE}/${MASTER_SHA_TXT}" "${KEEP_DIR_NAME}/${MASTER_SHA_TXT}"
-mv "${WORKSPACE}/${OLD_PROPERTIES_PATTERN}" "${KEEP_DIR_NAME}/${OLD_PROPERTIES_PATTERN}"
+mv "${WORKSPACE}/${OLD_PROPERTIES_NAME}" "${KEEP_DIR_NAME}/${OLD_PROPERTIES_NAME}"
 # delete all other files
 rm $WORKSPACE/* # removes files only - we only expect folders to exist in the workspace at the start of the build.
 rm $WORKSPACE/.sconsign.dblite
@@ -32,7 +33,7 @@ mv "${KEEP_DIR_NAME}/${PR_CACHE_FILE_NAME}" "${WORKSPACE}/${PR_CACHE_FILE_NAME}"
 mv "${KEEP_DIR_NAME}/${MASTER_CACHE_FILE_NAME}" "${WORKSPACE}/${MASTER_CACHE_FILE_NAME}"
 mv "${KEEP_DIR_NAME}/${MASTER_VALIDATION_NAME}" "${WORKSPACE}/${MASTER_VALIDATION_NAME}"
 mv "${KEEP_DIR_NAME}/${MASTER_SHA_TXT}" "${WORKSPACE}/${MASTER_SHA_TXT}"
-mv "${KEEP_DIR_NAME}/${OLD_PROPERTIES_PATTERN}" "${WORKSPACE}/${OLD_PROPERTIES_PATTERN}"
+mv "${KEEP_DIR_NAME}/${OLD_PROPERTIES_NAME}" "${WORKSPACE}/${OLD_PROPERTIES_NAME}"
 # we don't need this anymore
 rm -rf $KEEP_DIR_NAME
 echo "Workspace now:"

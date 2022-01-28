@@ -45,7 +45,7 @@ fi
 # If the properties file is there but those variables are not present,
 # the resulting variables will be empty
 REPO_SHORT=$(echo $REPOSITORY | sed 's|^.*/||')
-BUILD_PROPERTIES_FILE=trigger-mu2e-build-Mu2e-${REPO_SHORT}-${PULL_REQUEST}.properties 
+BUILD_PROPERTIES_FILE=job_params.txt
 if [ -f "$WORKSPACE/$BUILD_PROPERTIES_FILE" ]; then
     export TEST_WITH_PR=$(grep --color=never TEST_WITH_PR $WORKSPACE/$BUILD_PROPERTIES_FILE | sed s/TEST_WITH_PR=//)
     export NO_MERGE=$(grep --color=never NO_MERGE $WORKSPACE/$BUILD_PROPERTIES_FILE | sed s/NO_MERGE=//)
