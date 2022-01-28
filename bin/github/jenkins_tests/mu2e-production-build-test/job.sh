@@ -299,6 +299,8 @@ EOM
 
 fi
 
+# write a file containing the build, merge, etc params so validation can use them
+writeOutParams
 
 cmsbot_report "$WORKSPACE/gh-report.md"
 

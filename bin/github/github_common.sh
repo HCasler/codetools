@@ -178,3 +178,15 @@ function build_test_report() {
     fi
     append_report_row "$i" "${STATUS_temp}" "[Log file.](${JOB_URL}/${BUILD_NUMBER}/artifact/$i.log) ${EXTRAINFO}"
 }
+
+function writeOutParams() {
+    cat > job_params.txt <<- EOM
+REPOSITORY=${REPOSITORY}
+PULL_REQUEST=${PULL_REQUEST}
+COMMIT_SHA=${COMMIT_SHA}
+MASTER_COMMIT_SHA=${MASTER_COMMIT_SHA}
+TEST_WITH_PR=${TEST_WITH_PR}
+NO_MERGE=${NO_MERGE}
+
+EOM
+}
