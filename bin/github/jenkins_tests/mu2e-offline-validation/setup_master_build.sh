@@ -97,7 +97,7 @@ cat /proc/cpuinfo | head -30
         echo "[`date`] caching shared libraries at this revision"
 
         cd "$WORKING_DIRECTORY_MASTER" || exit 1
-        tar -zcvf rev_${MASTER_COMMIT_SHA}_master_lib.tar.gz Offline/lib || exit 1
+        tar -zcvf rev_${MASTER_COMMIT_SHA}_master_lib.tar.gz Offline Production build || exit 1
 
         exit 0;
     fi
